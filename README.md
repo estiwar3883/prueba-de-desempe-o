@@ -1,36 +1,242 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Prueba de Desempeño - Sistema de Gestión con Next.js + Prisma
 
-## Getting Started
+## README.md detallado con:
 
-First, run the development server:
+### 3. Descripción del proyecto y módulo
+
+Sistema web desarrollado con **Next.js + TypeScript + Prisma + PostgreSQL** para administrar usuarios, autenticación segura y gestión de documentos.
+
+### Módulos:
+
+* Autenticación (login/register)
+* Usuarios
+* Roles y permisos
+* Documentos
+* Bitácora
+* Panel administrativo
+
+---
+
+### 4. Requisitos previos
+
+Instalar antes de iniciar:
+
+* Node.js 18+
+* npm o yarn
+* PostgreSQL 14+
+* Git
+* Visual Studio Code (opcional)
+
+Verificar:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+node -v
+npm -v
+psql --version
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 5. Instalación paso a paso
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+git clone https://github.com/TU_USUARIO/TU_REPOSITORIO.git
+cd TU_REPOSITORIO
+npm install
+```
 
-## Learn More
+Crear base de datos PostgreSQL:
 
-To learn more about Next.js, take a look at the following resources:
+```sql
+CREATE DATABASE prueba_db;
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Migraciones:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bash
+npx prisma generate
+npx prisma migrate dev
+```
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### 6. Configuración de variables de entorno
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Crear archivo `.env`
+
+```env
+DATABASE_URL="postgresql://postgres:1234@localhost:5432/prueba_db"
+JWT_SECRET="secret123"
+JWT_REFRESH_SECRET="refresh123"
+PORT=3000
+```
+
+Crear archivo `.env.example`
+
+```env
+DATABASE_URL="postgresql://USER:PASSWORD@localhost:5432/DB_NAME"
+JWT_SECRET="your_secret"
+JWT_REFRESH_SECRET="your_refresh_secret"
+PORT=3000
+```
+
+---
+
+### 7. Comandos para ejecutar
+
+```bash
+npm install
+npm run dev
+npm run build
+npm run start
+npm run lint
+```
+
+Proyecto en:
+
+```text
+http://localhost:3000
+```
+
+---
+
+### 8. Documentación de endpoints (curl o Postman)
+
+## Auth
+
+### Registrar usuario
+
+```bash
+curl -X POST http://localhost:3000/api/auth/register \
+-H "Content-Type: application/json" \
+-d '{"email":"test@test.com","password":"123456"}'
+```
+
+### Login
+
+```bash
+curl -X POST http://localhost:3000/api/auth/login \
+-H "Content-Type: application/json" \
+-d '{"email":"test@test.com","password":"123456"}'
+```
+
+### Obtener usuario actual
+
+```bash
+curl http://localhost:3000/api/auth/me
+```
+
+## Usuarios
+
+```bash
+GET /api/users
+PUT /api/users/:id
+```
+
+## Documentos
+
+```bash
+GET /api/document
+POST /api/document
+```
+
+---
+
+### 9. Datos de prueba
+
+## Usuario administrador
+
+```json
+{
+  "email": "admin@test.com",
+  "password": "123456"
+}
+```
+
+## Usuario normal
+
+```json
+{
+  "email": "user@test.com",
+  "password": "123456"
+}
+```
+
+## Request ejemplo documento
+
+```json
+{
+  "title": "Contrato",
+  "content": "Documento de prueba",
+  "keywords": ["legal","empresa"]
+}
+```
+
+---
+
+### 10. Colección Postman o archivo .env.example con valores de prueba
+
+Incluido `.env.example`.
+
+Colección Postman sugerida:
+
+* Auth Register
+* Auth Login
+* Auth Me
+* Users Get
+* Documents Create
+* Documents List
+
+---
+
+### 11. Diagrama de entidades (ER diagram)
+
+```text
+User
+----
+id (PK)
+email
+password
+role
+status
+createdAt
+
+Document
+--------
+id (PK)
+title
+content
+keywords
+userId (FK)
+createdAt
+
+Bitacora
+--------
+id (PK)
+action
+entityType
+entityId
+details
+createdAt
+userId (FK)
+
+Relaciones:
+User 1 --- N Document
+User 1 --- N Bitacora
+```
+
+---
+
+# 👨‍💻 Autor
+
+Estiven Mosquera
+
+---
+
+# ✅ Proyecto listo para usar
+
+```bash
+npm install
+npx prisma migrate dev
+npm run dev
+```
